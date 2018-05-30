@@ -1,0 +1,30 @@
+<ion-header>
+        <ion-navbar hideBackButton="true">
+            <ion-title>Iniciar Sesión</ion-title>
+        </ion-navbar>
+    </ion-header>
+    
+    <ion-content>
+        <form #signInForm="ngForm" (submit)="signIn()">
+            <ion-list>
+                <ion-item>
+                    <ion-label stacked>Correo electrónico</ion-label>
+                    <ion-input [(ngModel)]="userModel.email" type="email" autocorrect="off" autocapitalize="none" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                        required></ion-input>
+                </ion-item>
+    
+                <ion-item>
+                    <ion-label stacked>Contraseña</ion-label>
+                    <ion-input [(ngModel)]="userModel.password" type="password" name="password" required minlength="6"></ion-input>
+                </ion-item>
+    
+                <div padding-left padding-right padding-top>
+                    <button ion-button [disabled]="!signInForm.form.valid" block>Entrar</button>
+                </div>
+    
+                <!--div padding-left padding-right>
+                    <p>&iquest;No tiene Cuenta de Usuario? <a (click)="signUp()">Regístrese</a>
+                </div-->
+            </ion-list>
+        </form>
+    </ion-content>

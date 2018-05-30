@@ -1,0 +1,59 @@
+<!--ion-header>
+    <ion-navbar>
+        <ion-title>Registrarse</ion-title>
+    </ion-navbar>
+</ion-header>
+
+<ion-content>
+    <form class="list" [formGroup]="form" (ngSubmit)="btnSubmit()">
+        <ion-list>
+
+                <ion-item >
+                        <ion-label floating>Correo electrónico</ion-label>
+                        <ion-input type="text" formControlName="user" value="" ></ion-input>
+                    </ion-item>
+
+                    <ion-item *ngIf="form.get('user').errors && form.get('user').dirty">
+                            <p color="danger" ion-text *ngIf="form.get('user').hasError('required')">Campo requerido</p>
+                        </ion-item>
+                        <ion-item >
+                        <ion-label floating>Contraseña</ion-label>
+                        <ion-input type="password" formControlName="pass" value="" ></ion-input>
+                    </ion-item>
+
+                    <ion-item *ngIf="form.get('pass').errors && form.get('pass').dirty">
+                            <p color="danger" ion-text *ngIf="form.get('pass').hasError('required')">Campo requerido</p>
+                        </ion-item>
+
+                <button type="submit" [disabled]="!form.valid" block ion-button  >Enviar</button>
+            
+        </ion-list>
+    </form>
+</ion-content-->
+
+<ion-header>
+        <ion-navbar>
+            <ion-title>Registrarse</ion-title>
+        </ion-navbar>
+    </ion-header>
+    
+    <ion-content>
+        <form>
+            <ion-list>
+                <ion-item>
+                    <ion-label stacked>Correo electrónico</ion-label>
+                    <ion-input type="email" autocorrect="off" autocapitalize="none" name="email" pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$"
+                        required></ion-input>
+                </ion-item>
+    
+                <ion-item>
+                    <ion-label stacked>Contraseña</ion-label>
+                    <ion-input type="password" name="password" required minlength="6"></ion-input>
+                </ion-item>
+    
+                <div padding-left padding-right padding-top>
+                    <button ion-button block>Registrarse</button>
+                </div>
+            </ion-list>
+        </form>
+    </ion-content>

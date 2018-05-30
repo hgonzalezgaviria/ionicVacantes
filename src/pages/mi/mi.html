@@ -1,0 +1,60 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title> Mis Postulaciones </ion-title>
+    <button class="button button-clear pull-left" (click) = "close()" >Edit</button>      
+  </ion-navbar>
+  
+</ion-header>
+
+<ion-content padding>
+
+    
+<div>
+    <ion-item>
+        <ion-label>Nombre:</ion-label>
+        <ion-label><b>{{ nombre }}</b></ion-label>        
+      </ion-item>
+      
+      <ion-item>
+          <ion-label>Cedula:</ion-label>
+          <ion-label><b>{{ cedula }}</b></ion-label>        
+        </ion-item>
+
+        <ion-item>
+            <ion-label>Correo:</ion-label>
+            <ion-label><b>{{ correo }}</b></ion-label>        
+          </ion-item>
+    
+    </div>
+
+
+    <ion-list>
+        
+
+        <ion-card wrap *ngFor="let a of dataUser; let index= index">            
+            <ion-card-header>
+                <b>Vancate:</b> {{ a.VACA_ID }}
+            </ion-card-header>
+            <ion-card-content>
+               <b>Empresa:</b> {{ a.EMPR_DESCRIPCION }} <br>
+               <b>Fecha Inicio:</b> {{ a.VACA_FECHAINICIO }} <br>
+               <b>Fecha Fin:</b>  {{ a.VACA_FECHAFIN }} <br>
+               <b>Programa:</b>  {{ a.VACA_PROGRAMA }} <br>
+               <b>Requisitos Vancante:</b> {{ a.VACA_REQUISITOS }}<br>
+               <b>Fecha postulación:</b> {{ a.POST_FECHA }}<br>
+               
+                              <!--<button ion-fab (click) = "add()" >Postularse</button>-->
+            </ion-card-content>
+            
+          </ion-card>
+          
+    </ion-list>
+
+
+ 
+<!--
+  <ion-fab bottom right>
+    <button ion-fab (click)= "add(cedula)" >Agregar</button>
+  </ion-fab>  
+-->
+</ion-content>
