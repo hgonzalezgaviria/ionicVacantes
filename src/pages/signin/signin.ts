@@ -31,7 +31,7 @@ export class SignInPage {
         //alert(this.userModel.email);
         var mail= this.userModel.email;
         var pass = this.userModel.password;
-        this.http.get('http://192.168.0.16:8081/novedades/public/validarUsuario?mail='+mail+'&pass='+pass, {}, this.header)
+        this.http.get('http://181.49.221.76:8085/novedades/public/validarUsuario?mail='+mail+'&pass='+pass, {}, this.header)
         .then(res => {
           try{
             console.log(res);

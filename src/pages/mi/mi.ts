@@ -44,7 +44,7 @@ export class MiPage {
     //this.header['Cache-Control'] = 'no-cache';
     //this.http.clearCookies();
     var idUsuario= localStorage.getItem('storedData');
-    this.http.get('http://192.168.0.16:8081/novedades/public/getVacantesUsuarios?user='+idUsuario, {}, this.header)
+    this.http.get('http://181.49.221.76:8085/novedades/public/getVacantesUsuarios?user='+idUsuario, {}, this.header)
     .then(res => {
       try{
         var dataLoc= JSON.parse(res.data);

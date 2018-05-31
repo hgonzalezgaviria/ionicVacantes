@@ -48,7 +48,7 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
   }
 
   getMarkers(){
-    this.http.get('http://192.168.0.16:8081/novedades/public/getVacantesUbicacion').map((res)=>res.json()).subscribe(data=>{
+    this.http.get('http://181.49.221.76:8085/novedades/public/getVacantesUbicacion').map((res)=>res.json()).subscribe(data=>{
     this.addMarkersMap(data);
     });
   }
@@ -147,7 +147,7 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       var idVacante= id;
       var idUsuario= localStorage.getItem('storedData');
       console.log(idUsuario);
-      this.http2.get('http://192.168.0.16:8081/novedades/public/addPostulacion?id='+idVacante+'&idUsuario='+idUsuario, {}, this.header)
+      this.http2.get('http://181.49.221.76:8085/novedades/public/addPostulacion?id='+idVacante+'&idUsuario='+idUsuario, {}, this.header)
       .then(ress => {
         try{
           console.log(ress);

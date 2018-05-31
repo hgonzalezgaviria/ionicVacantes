@@ -30,7 +30,7 @@ export class AboutPage {
   ionViewDidEnter(){
     //this.header['Cache-Control'] = 'no-cache';
     //this.http.clearCookies();
-    this.http.get('http://192.168.0.16:8081/novedades/public/getVacantes', {}, this.header)
+    this.http.get('http://181.49.221.76:8085/novedades/public/getVacantes', {}, this.header)
     .then(res => {
       try{
         this.data= JSON.parse(res.data);       
@@ -51,7 +51,7 @@ export class AboutPage {
     data = this.form.value;
       let cedula = this.form.get('cedula').value;
       console.log(cedula);
-      this.http.get('http://192.168.0.16:8081/novedades/public/getVacantes', {}, this.header)
+      this.http.get('http://181.49.221.76:8085/novedades/public/getVacantes', {}, this.header)
       .then(res => {
         try{
           this.data= JSON.parse(res.data);
@@ -76,7 +76,7 @@ export class AboutPage {
     var idVacante= id;
     var idUsuario= localStorage.getItem('storedData');
     console.log(idUsuario);
-    this.http.get('http://192.168.0.16:8081/novedades/public/addPostulacion?id='+idVacante+'&idUsuario='+idUsuario, {}, this.header)
+    this.http.get('http://181.49.221.76:8085/novedades/public/addPostulacion?id='+idVacante+'&idUsuario='+idUsuario, {}, this.header)
     .then(ress => {
       try{
         console.log(ress);
