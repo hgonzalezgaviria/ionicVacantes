@@ -31,7 +31,7 @@ export class SignInPage {
         //alert(this.userModel.email);
         var mail= this.userModel.email;
         var pass = this.userModel.password;
-        this.http.get('http://localhost:8081/novedades/public/validarUsuario?mail='+mail+'&pass='+pass, {}, this.header)
+        this.http.get('http://192.168.0.16:8081/novedades/public/validarUsuario?mail='+mail+'&pass='+pass, {}, this.header)
         .then(res => {
           try{
             console.log(res);
@@ -59,13 +59,13 @@ export class SignInPage {
             
           } catch(e){
             console.error('Err:'+e);        
-            this.alert('Error', 'Ha ocurrido un error inesperado. Por favor intente nuevamente.');
+            this.alert('Error', 'NOOOOHOME.');
             loading.dismiss();
           }
              
     
         }).catch(e => {
-            this.alert('Error', 'Ha ocurrido un error inesperado. Por favor intente nuevamente.');
+            this.alert('Error', 'siiiiHOME.');
           console.log(e);
           loading.dismiss();
         });

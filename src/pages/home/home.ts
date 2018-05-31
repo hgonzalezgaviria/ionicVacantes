@@ -1,7 +1,8 @@
-import { Component,ElementRef, ViewChild } from '@angular/core';
-import { NavController } from 'ionic-angular';
+import { Component,ElementRef, ViewChild, NgZone } from '@angular/core';
+import { NavController, ToastController } from 'ionic-angular';
 //import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import {Http} from '@angular/http';
+import { HTTP } from '@ionic-native/http';
 import 'rxjs/add/operator/map';
 
 declare var google;
@@ -14,7 +15,15 @@ export class HomePage {
   @ViewChild('map') mapElement: ElementRef;
   
   map: any;
-  constructor(public navCtrl: NavController, public http: Http) {
+  contentHtml= '';
+  idVacante=0;
+  toaster: any;
+  header:any= {};
+  constructor(public navCtrl: NavController, public http: Http, private toastCtrl:ToastController,public http2: HTTP, public zone: NgZone) {
+    this.toaster = this.toastCtrl.create({
+      duration: 3000,
+      position: 'bottom'
+    });
   }
 
   ionViewDidLoad(){
@@ -22,9 +31,12 @@ export class HomePage {
     this.getMarkers();
     //this.getPosition();
   }
+
+  
   displayGoogleMap(){
     //let mapEle: HTMLElement = document.getElementById('map');
-let latLng = new google.maps.LatLng(3.4290201, -76.5402327);
+
+    let latLng = new google.maps.LatLng(3.4290201, -76.5402327);
 
 console.log(latLng);
 let mapOptions ={
@@ -36,23 +48,46 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
   }
 
   getMarkers(){
-    this.http.get('http://localhost:8081/novedades/public/getVacantesUbicacion').map((res)=>res.json()).subscribe(data=>{
+    this.http.get('http://192.168.0.16:8081/novedades/public/getVacantesUbicacion').map((res)=>res.json()).subscribe(data=>{
     this.addMarkersMap(data);
     });
   }
 
   addInfoWindow(marker, content) {
-
-    let infoWindow = new google.maps.InfoWindow({
+    var infoWindow=null;
+     infoWindow = new google.maps.InfoWindow({
         content: content,
         maxWidth: 200
         
     });
 
-    google.maps.event.addListener(marker, 'click', () => {
-        infoWindow.open(this.map, marker);
+    google.maps.event.addListener(marker, 'click', function() {
+      infoWindow.close();
+      infoWindow.setContent(content);
+      infoWindow.open(this.map, this);
+      
     });
+    setTimeout(function () { infoWindow.close(); }, 5000);
+    
+    
+    google.maps.event.addListenerOnce(infoWindow, 'domready', () => { //caotura evento del boton
+      document.getElementById('myid').addEventListener('click', () => {
+        var idVaca=document.getElementById('myid').getAttribute('data-vaca');
+        this.add(idVaca);
+        //console.log(document.getElementById('myid').dataset.vaca);
 
+        
+      //alert('SIIIII');
+      });
+      });
+
+    //setTimeout(function () { infoWindow.close(); }, 5000);
+/*
+    google.maps.event.addListener(marker, 'click', function() {
+      infoWindow.setContent(this.contentHtml);
+        infoWindow.open(this.map, this);
+    });
+*/
 }
 
   addMarkersMap(markers){    
@@ -61,30 +96,10 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       var emp = marker.EMPR_DESCRIPCION;
       var vaId = marker.VACA_PROGRAMA;
       var program = marker.VACA_REQUISITOS;
+     var idVaca= marker.VACA_ID;
+     var salario= marker.VACA_SALARIO;
       var loc = {lat: marker.EMPR_LATITUD, lng: marker.EMPR_LOGITUD };
       console.log(loc);
-/*
-      var contentString = '<div id="content">' +
-      '<div id="siteNotice">' +
-      '</div>' +
-      '<h1 id="firstHeading" class="firstHeading">'+program+'</h1>' +
-      '<div id="bodyContent">' +
-      '<p><b>UNIAJC</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-      'sandstone rock formation in the southern part of the ' +
-      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
-      'south west of the nearest large town, Alice Springs; 450&#160;km ' +
-      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
-      'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
-      'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
-      'Aboriginal people of the area. It has many springs, waterholes, ' +
-      'rock caves and ancient paintings. Uluru is listed as a World ' +
-      'Heritage Site.</p>' +
-      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-      'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
-      '(last visited June 22, 2009).</p>' +
-      '</div>' +
-      '</div>';
-      */
       
      let  marker_custom  = new google.maps.Marker({
       position: loc,
@@ -100,81 +115,63 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
           '<div id="bodyContent">' +
           '<p><b>'+vaId+'</b>, '+program+' .'+
           '.</p>' +
-          '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-          'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
+          '<p>Vacante: Compex, <a href="https://www.computrabajo.com.co/ofertas-de-trabajo/oferta-de-trabajo-de-auxiliar-administrativo-medellin-idioma-ingles-y-portugues-avanzado-en-medellin-3A1D6D521A932460">' +
+          'https://www.computrabajo.com.co/ofertas-de-trabajo</a> ' +
           '(last visited June 22, 2009).</p>' +
+          '<button class="button" id="myid" data-vaca="'+idVaca+'">Postularme</button>'+ 
+          '<p><b>Salario:</b>$ '+salario+ '</p>' +         
           '</div>' +
           '</div>';
           
+          
+          this.contentHtml =content;
+          
+          //'<button id = "myid">Click me</button>'+          
+          //'<button (click)=\"myFunction()\">Click me</button>'+
+          //ng-click="angular.element(\'#map\').scope().goToPage()
                  
-
+          this.idVacante=idVaca;
           this.addInfoWindow(marker_custom, content);
         
       }
     //});
 
     }
-  }
-/*
-  getPosition():any{
-    this.geolocation.getCurrentPosition().then(response =>{
-      this.loadMap(response);
-    })
-    .catch(error =>{
-      console.log(error);
-    })
-  }
-  loadMap(position: Geoposition){
-    let latitude = position.coords.latitude; //obtenemos la latitud.
-    let longitude = position.coords.longitude; //obtenemos la longitud.
-    console.log(latitude, longitude);
-    let mapEle: HTMLElement = document.getElementById('map');
-    let myLatLng = {
-      lat: latitude,
-      lng: longitude
-    };
-    this.map = new google.maps.Map(mapEle, {
-      center: myLatLng,
-      zoom: 12
-    });
-    google.maps.event.addListenerOnce(this.map, 'idle', () =>{
-      let marker = new google.maps.Marker({
-        position: myLatLng,
-        map: this.map,
-        title: 'AQUI ESTOY HECTOR!'
-      });
-      mapEle.classList.add('show-map');
     
 
-      var contentString = '<div id="content">' +
-      '<div id="siteNotice">' +
-      '</div>' +
-      '<h1 id="firstHeading" class="firstHeading">UNIAJC</h1>' +
-      '<div id="bodyContent">' +
-      '<p><b>UNIAJC</b>, also referred to as <b>Ayers Rock</b>, is a large ' +
-      'sandstone rock formation in the southern part of the ' +
-      'Northern Territory, central Australia. It lies 335&#160;km (208&#160;mi) ' +
-      'south west of the nearest large town, Alice Springs; 450&#160;km ' +
-      '(280&#160;mi) by road. Kata Tjuta and Uluru are the two major ' +
-      'features of the Uluru - Kata Tjuta National Park. Uluru is ' +
-      'sacred to the Pitjantjatjara and Yankunytjatjara, the ' +
-      'Aboriginal people of the area. It has many springs, waterholes, ' +
-      'rock caves and ancient paintings. Uluru is listed as a World ' +
-      'Heritage Site.</p>' +
-      '<p>Attribution: Uluru, <a href="https://en.wikipedia.org/w/index.php?title=Uluru&oldid=297882194">' +
-      'https://en.wikipedia.org/w/index.php?title=Uluru</a> ' +
-      '(last visited June 22, 2009).</p>' +
-      '</div>' +
-      '</div>';
-
-      var infowindow = new google.maps.InfoWindow({
-        content: contentString
+    add(id){
+      this.toaster=this.toastCtrl.create({
+        duration: 3000,
+        position: 'bottom'
       });
-
-      marker.addListener('click', function () {
-        infowindow.open(this.map, marker);
+      var idVacante= id;
+      var idUsuario= localStorage.getItem('storedData');
+      console.log(idUsuario);
+      this.http2.get('http://192.168.0.16:8081/novedades/public/addPostulacion?id='+idVacante+'&idUsuario='+idUsuario, {}, this.header)
+      .then(ress => {
+        try{
+          console.log(ress);
+          var dataIns= JSON.parse(ress.data);
+          this.toaster.setMessage(dataIns.success);
+          this.toaster.present();        
+          this.toaster=null;
+          console.log(dataIns);
+        } catch(e){
+          console.error('Err:'+e);        
+          this.toaster=null;
+        }
+           
+  
+      }).catch(e => {
+        console.log(e);
+        this.toaster=null;
       });
-    });
+      //this.navCtrl.push("formPage", {ID: id});
+      //this.insertarDato();
+      
+  
+    
+    }
+   
+    
   }
-*/
-//}
