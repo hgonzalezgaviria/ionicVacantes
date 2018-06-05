@@ -1,5 +1,5 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController,App } from 'ionic-angular';
 import { HTTP } from '@ionic-native/http';
 import { UserModel } from '../../models/user-model';
 import { SignInPage } from '../signin/signin';
@@ -23,7 +23,7 @@ export class MiPage {
   dataUser:any=[];
   
 
-  constructor(public navCtrl: NavController, public http: HTTP, public zone: NgZone, public navParams: NavParams, private toastCtrl:ToastController, private alertCtrl: AlertController  ) {
+  constructor(public navCtrl: NavController, public http: HTTP, public zone: NgZone, public navParams: NavParams, private toastCtrl:ToastController, private alertCtrl: AlertController, public app: App  ) {
    
     this.toaster = this.toastCtrl.create({
       duration: 3000,
@@ -67,7 +67,8 @@ export class MiPage {
   }
 
   close(){
-    this.navCtrl.push(SignInPage);
+    //this.navCtrl.push(SignInPage);
+    this.app.getRootNav().setRoot( SignInPage );
     
 
   }

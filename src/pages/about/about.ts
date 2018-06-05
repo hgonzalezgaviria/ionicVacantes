@@ -1,7 +1,7 @@
 import { Component, NgZone } from '@angular/core';
-import { NavController, NavParams, ToastController } from 'ionic-angular';
+import { NavController, NavParams, ToastController,App } from 'ionic-angular';
 import { HTTP } from '@ionic-native/http';
-
+import { SignInPage } from '../signin/signin';
 
 @Component({
   selector: 'page-about',
@@ -14,7 +14,7 @@ export class AboutPage {
   toaster: any;
   
 
-  constructor(public navCtrl: NavController, public http: HTTP, public zone: NgZone, public navParams: NavParams, private toastCtrl:ToastController  ) {
+  constructor(public navCtrl: NavController, public http: HTTP, public zone: NgZone, public navParams: NavParams, private toastCtrl:ToastController, public app: App  ) {
    
     this.toaster = this.toastCtrl.create({
       duration: 3000,
@@ -102,9 +102,9 @@ export class AboutPage {
   
   }
 
-  insertarDato(){
-    //this.ID = this.navParams.get("ID");
-    //alert(this.ID);
+  closesession(){
+    this.app.getRootNav().setRoot( SignInPage );
+
   }
 
 }

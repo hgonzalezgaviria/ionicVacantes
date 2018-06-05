@@ -1,9 +1,10 @@
 import { Component,ElementRef, ViewChild, NgZone } from '@angular/core';
-import { NavController, ToastController } from 'ionic-angular';
+import { NavController, ToastController, App } from 'ionic-angular';
 //import { Geolocation, Geoposition } from '@ionic-native/geolocation';
 import {Http} from '@angular/http';
 import { HTTP } from '@ionic-native/http';
 import 'rxjs/add/operator/map';
+import { SignInPage } from '../signin/signin';
 
 declare var google;
 var infoWindow=null;
@@ -20,7 +21,7 @@ export class HomePage {
   idVacante=0;
   toaster: any;
   header:any= {};
-  constructor(public navCtrl: NavController, public http: Http, private toastCtrl:ToastController,public http2: HTTP, public zone: NgZone) {
+  constructor(public navCtrl: NavController, public http: Http, private toastCtrl:ToastController,public http2: HTTP, public zone: NgZone, public app: App) {
     this.toaster = this.toastCtrl.create({
       duration: 3000,
       position: 'bottom'
@@ -185,6 +186,10 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       
   
     
+    }
+    closesession(){
+      this.app.getRootNav().setRoot( SignInPage );
+
     }
    
     
