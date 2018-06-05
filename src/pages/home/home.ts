@@ -6,6 +6,7 @@ import { HTTP } from '@ionic-native/http';
 import 'rxjs/add/operator/map';
 
 declare var google;
+var infoWindow=null;
 
 @Component({
   selector: 'page-home',
@@ -54,22 +55,35 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
   }
 
   addInfoWindow(marker, content) {
-    var infoWindow=null;
+    
      infoWindow = new google.maps.InfoWindow({
         content: content,
         maxWidth: 200
         
     });
 
-    google.maps.event.addListener(marker, 'click', function() {
-      infoWindow.close();
+    marker.addListener('click', function() {
+      //infoWindow.close();
       infoWindow.setContent(content);
       infoWindow.open(this.map, this);
       
     });
-    setTimeout(function () { infoWindow.close(); }, 5000);
+    //setTimeout(function () { infoWindow.close(); }, 5000);
     
-    
+
+    google.maps.event.addListener(infoWindow, 'domready', () => {
+      document.getElementById("myid").addEventListener("click", ()=> {
+        var idVaca=document.getElementById('myid').getAttribute('data-vaca');  
+        console.log("hello se va a postular");
+
+          //  alert('SIIIII' + idVaca);
+             
+            this.add(idVaca);
+      });
+      
+  });
+  
+    /*
     google.maps.event.addListenerOnce(infoWindow, 'domready', () => { //caotura evento del boton
       document.getElementById('myid').addEventListener('click', () => {
         var idVaca=document.getElementById('myid').getAttribute('data-vaca');
@@ -80,7 +94,7 @@ this.map = new google.maps.Map(this.mapElement.nativeElement, mapOptions);
       //alert('SIIIII');
       });
       });
-
+*/
     //setTimeout(function () { infoWindow.close(); }, 5000);
 /*
     google.maps.event.addListener(marker, 'click', function() {
