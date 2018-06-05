@@ -3,6 +3,8 @@ import { NavController, NavParams, ToastController } from 'ionic-angular';
 import { HTTP } from '@ionic-native/http';
 import { UserModel } from '../../models/user-model';
 import { SignInPage } from '../signin/signin';
+import { AlertController } from 'ionic-angular';
+
 
 
 @Component({
@@ -21,7 +23,7 @@ export class MiPage {
   dataUser:any=[];
   
 
-  constructor(public navCtrl: NavController, public http: HTTP, public zone: NgZone, public navParams: NavParams, private toastCtrl:ToastController  ) {
+  constructor(public navCtrl: NavController, public http: HTTP, public zone: NgZone, public navParams: NavParams, private toastCtrl:ToastController, private alertCtrl: AlertController  ) {
    
     this.toaster = this.toastCtrl.create({
       duration: 3000,
@@ -66,6 +68,49 @@ export class MiPage {
 
   close(){
     this.navCtrl.push(SignInPage);
+    
+
+  }
+
+  destacar(id){
+
+    let alert = this.alertCtrl.create({
+      title: 'Descartar postulación',
+      message: 'Desea cancelar esta postulación?',
+      buttons: [
+        {
+          text: 'Cancelar',
+          role: 'cancel',
+          handler: () => {
+            console.log('Cancel clicked');
+          }
+        },
+        {
+          text: 'Aceptar',
+          handler: () => {
+            console.log('Buy clicked');
+            var idUsuario= localStorage.getItem('storedData');
+    this.http.get('http://181.49.221.76:8085/novedades/public/delPostulacion?id='+id+'&idUsuario='+idUsuario, {}, this.header)
+    .then(res => {
+      try{
+        var dataLoc= JSON.parse(res.data);      
+        this.ionViewDidLoad();
+      } catch(e){
+        console.error('Err:'+e);
+      }
+        
+
+    }).catch(e => {
+      console.log(e);
+    });
+
+          }
+        }
+      ]
+    });
+    alert.present();
+
+    
     
 
   }
